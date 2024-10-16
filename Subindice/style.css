@@ -1,0 +1,222 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #012a42, #013952); 
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    transition: background 0.6s ease-in-out;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+    pointer-events: none; /* No afecta la interacción del usuario */
+    z-index: 0;
+}
+
+/* Container Cards */
+.container-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+    z-index: 1; /* Para estar por encima del pseudo-elemento de body */
+}
+
+/* Title Card */
+.title-cards {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00747b, #00a2a8);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: background 0.4s ease-in-out;
+}
+
+.title-cards:hover {
+    background: linear-gradient(135deg, #00a2a8, #00747b);
+    transform: translateY(-5px); /* Sutil elevación al pasar el cursor */
+}
+
+.container-titulo h1 {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    transition: color 0.4s ease;
+}
+
+.container-Subtitulo h2 {
+    font-size: 1.3rem;
+    font-weight: 300;
+    margin-top: 5px;
+    color: #e0f7fa;
+    transition: color 0.4s ease;
+}
+
+.title-cards:hover .container-titulo h1, 
+.title-cards:hover .container-Subtitulo h2 {
+    color: #f4f4f9;
+}
+
+/* Cards */
+.card {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.4s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.card .contenido-card {
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #f4f4f9, #eaeaea);
+}
+
+.card .contenido-card h3 {
+    margin-bottom: 10px;
+    color: #162b4e;
+    font-size: 1.6rem;
+    transition: color 0.3s ease;
+}
+
+.card .contenido-card p {
+    color: #6c7a89;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: color 0.3s ease;
+}
+
+.card .contenido-card a {
+    display: inline-block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #2fb4cc;
+    border: 2px solid #2fb4cc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.card .contenido-card a:hover {
+    background: #2fb4cc;
+    color: #fff;
+    border-color: #2fb4cc;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 420px) {
+    .container-titulo h1 {
+        font-size: 1.8rem;
+    }
+    .container-Subtitulo h2 {
+        font-size: 1.2rem;
+    }
+    .card .contenido-card h3 {
+        font-size: 1.4rem;
+    }
+}
+
+
+
+
+
+/* Botón flotante "Atrás" */
+.btn_float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.btn_float .btn_atras {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el icono y el texto */
+    padding: 12px 20px;
+    background-color: #00747b;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Inicialmente invisible */
+    transform: translateY(20px); /* Desplazado hacia abajo */
+    animation: slideIn 0.5s forwards; /* Animación de entrada */
+}
+
+.btn_float .btn_atras i {
+    font-size: 1.5rem;
+}
+
+.btn_float .btn_atras span {
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+    to {
+        opacity: 1; /* Visible al final de la animación */
+        transform: translateY(0); /* Regresar a la posición original */
+    }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .btn_float .btn_atras {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+
+    .btn_float .btn_atras i {
+        font-size: 1.2rem;
+    }
+
+    .btn_float .btn_atras span {
+        font-size: 0.9rem;
+    }
+}

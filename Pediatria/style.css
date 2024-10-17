@@ -109,7 +109,7 @@ body {
     overflow: hidden;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
-    height: 175px; /* Reducir la altura total de las tarjetas */
+    height: 115px; /* Reducir la altura total de las tarjetas */
 }
 
 .card figure {

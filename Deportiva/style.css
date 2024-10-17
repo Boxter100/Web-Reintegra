@@ -1,0 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: #012a42;
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Contenedor del título con fondo */
+.title-cards {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #00747b, #00a2a8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Animación de escritura en tiempo real para el título */
+@keyframes typingEffect {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Animación del cursor parpadeante */
+@keyframes blinkCaret {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Título con animación */
+@keyframes typingEffect {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%; /* Escribe todo el texto */
+    }
+}
+
+@keyframes blinkCaret {
+    50% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: transparent; /* Cursor desaparece al final */
+    }
+}
+
+.container-titulo h1 {
+    font-size: 2.5rem;
+    color: #01576e;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); 
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid;
+    width: 0;
+    display: inline-block;
+    animation: typingEffect 6.3s steps(30, end) forwards, blinkCaret 0.75s step-end 5 forwards; /* Sin infinito, parpadea 5 veces y desaparece */
+}
+
+
+/* Subtítulo con animación */
+.container-Subtitulo h2 {
+    font-size: 1.4rem;
+    color: #e0f7fa;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid;
+    width: 0;
+    display: inline-block;
+    animation: typingEffect 3s steps(25, end) 0.5s forwards, blinkCaret 0.75s step-end infinite; /* Desaparece el cursor tras la escritura */
+}
+
+
+
+
+/* Contenedor de tarjetas */
+.container-card {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 30px;
+}
+
+.card {
+    display: flex;
+    background-color: #01576e;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    height: 115px; /* Reducir la altura total de las tarjetas */
+}
+
+.card figure {
+    flex: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Para que las imágenes mantengan la proporción */
+    border-radius: 15px;
+}
+
+.contenido-card {
+    flex: 2;
+    padding: 10px; /* Reducir el padding para hacer más compacto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    margin-left: 10px;
+}
+
+.contenido-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    color: #e0f7fa;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.contenido-card a {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #00a2a8;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.contenido-card a:hover {
+    background-color: #00747b;
+}
+
+
+
+
+/* Botón flotante "Atrás" */
+.btn_float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.btn_float .btn_atras {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el icono y el texto */
+    padding: 12px 20px;
+    background-color: #00747b;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Inicialmente invisible */
+    transform: translateY(20px); /* Desplazado hacia abajo */
+    animation: slideIn 0.5s forwards; /* Animación de entrada */
+}
+
+.btn_float .btn_atras i {
+    font-size: 1.5rem;
+}
+
+.btn_float .btn_atras span {
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+    to {
+        opacity: 1; /* Visible al final de la animación */
+        transform: translateY(0); /* Regresar a la posición original */
+    }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .btn_float .btn_atras {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+
+    .btn_float .btn_atras i {
+        font-size: 1.2rem;
+    }
+
+    .btn_float .btn_atras span {
+        font-size: 0.9rem;
+    }
+}

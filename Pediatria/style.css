@@ -281,7 +281,7 @@ body {
     position: relative;
     display: flex;
     justify-content: space-between;
-    margin-right: 10px; /* Espacio entre la burbuja y el icono de send */
+    margin-right: 5px; /* Espacio entre la burbuja y el icono de send */
 }
 
 /* Texto dentro de la burbuja */
@@ -290,7 +290,7 @@ body {
     color: #333; /* Color del texto */
     line-height: 1.4;
     flex-grow: 1; /* Ocupa todo el espacio posible */
-    margin-right: 10px; /* Añadir espacio entre el mensaje y el icono de sticky */
+    margin-right: 5px; /* Añadir espacio entre el mensaje y el icono de sticky */
 }
 
 /* Icono de "sticky" dentro de la burbuja */

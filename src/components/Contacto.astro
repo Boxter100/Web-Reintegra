@@ -1,0 +1,192 @@
+---
+const horarios = [
+  "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
+  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+  "19:00", "20:00", "21:00"
+];
+
+// Pon aquí la URL real de tu Google Apps Script
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzBlNnmdjoOzltFx14x4MY2Lb-WI2cMgVPjHSpkj-9YeWVzm8J8P-Hra6Ev43JWwE4z9A/exec';
+---
+
+<section id="contacto" class="py-16 bg-gray-200">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Agenda tu Cita</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Completa el formulario para agendar una cita con nuestros especialistas.</p>
+    </div>
+    
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
+      <form id="contactForm" data-url={scriptURL} class="space-y-6">
+        <!-- Datos personales -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre</label>
+            <input 
+              type="text" 
+              id="nombre" 
+              name="nombre" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label for="apellido" class="block text-gray-700 font-medium mb-2">Apellido</label>
+            <input 
+              type="text" 
+              id="apellido" 
+              name="apellido" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="telefono" class="block text-gray-700 font-medium mb-2">Número de Teléfono</label>
+            <input 
+              type="tel" 
+              id="telefono" 
+              name="telefono" 
+              required 
+              pattern="[0-9]{10}" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p class="text-sm text-gray-500 mt-1">Formato: 10 dígitos sin espacios</p>
+          </div>
+          <div>
+            <label for="correo" class="block text-gray-700 font-medium mb-2">Correo Electrónico</label>
+            <input 
+              type="email" 
+              id="correo" 
+              name="correo" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        
+        <!-- Fecha y Hora -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="fecha" class="block text-gray-700 font-medium mb-2">Fecha de la Cita</label>
+            <input 
+              type="date" 
+              id="fecha" 
+              name="fecha" 
+              required 
+              min={new Date().toISOString().split('T')[0]}
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label for="horario" class="block text-gray-700 font-medium mb-2">Horario Preferido</label>
+            <div class="relative">
+              <select 
+                id="horario" 
+                name="horario" 
+                required 
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+              >
+                <option value="" disabled selected>Selecciona un horario</option>
+                {horarios.map(hora => (
+                  <option value={hora}>{hora} hrs</option>
+                ))}
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Mensaje adicional -->
+        <div>
+          <label for="mensaje" class="block text-gray-700 font-medium mb-2">Mensaje (opcional)</label>
+          <textarea 
+            id="mensaje" 
+            name="mensaje" 
+            rows="4" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          ></textarea>
+        </div>
+        
+        <!-- Botón de envío -->
+        <div class="text-center">
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Agendar Cita
+          </button>
+        </div>
+        
+        <!-- Mensaje de estado -->
+        <div id="formStatus" class="hidden text-center py-3 rounded-md mt-4"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    
+    if (!form || !formStatus) return;
+
+    // Aseguramos que 'form' sea HTMLFormElement para evitar error TypeScript
+    const contactForm = /** @type {HTMLFormElement} */ (form);
+    const scriptURL = contactForm.getAttribute('data-url');
+
+    if (!scriptURL) {
+      console.error('No se encontró la URL del script.');
+      return;
+    }
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      formStatus.textContent = 'Enviando tu solicitud...';
+      formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-blue-100 text-blue-700';
+
+      try {
+        const formData = new FormData(contactForm);
+
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          formStatus.textContent = '¡Tu cita ha sido agendada! Te contactaremos para confirmar.';
+          formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-green-100 text-green-700';
+          contactForm.reset();
+        } else {
+          throw new Error('Error en el servidor');
+        }
+      } catch (error) {
+        formStatus.textContent = 'Hubo un problema al agendar tu cita. Por favor, intenta nuevamente o contáctanos por teléfono.';
+        formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-red-100 text-red-700';
+        console.error('Error:', error);
+      }
+    });
+
+    // Validar que la fecha seleccionada no sea fin de semana
+    const fechaInput = document.getElementById('fecha');
+    if (fechaInput) {
+      fechaInput.addEventListener('change', (e) => {
+        const fecha = new Date(e.target.value);
+        const diaSemana = fecha.getDay();
+
+        if (diaSemana === 0 || diaSemana === 6) {
+          alert('Por favor selecciona un día entre lunes y viernes para tu cita.');
+          e.target.value = '';
+        }
+      });
+    }
+  });
+</script>

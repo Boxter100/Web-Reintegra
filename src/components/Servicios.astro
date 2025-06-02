@@ -1,0 +1,143 @@
+---
+// Servicios.astro - Sección de servicios ofrecidos
+
+const servicios = [
+  {
+    titulo: "Fisioterapia",
+    descripcion: "Tratamientos especializados para deportistas, prevención y recuperación de lesiones deportivas.",
+    icono: "M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905a3.61 3.61 0 01-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5",
+    detalles: [
+      { titulo: "Ortopédica", descripcion: "Tratamiento de lesiones y condiciones del sistema músculo-esquelético." },
+      { titulo: "Neurológica", descripcion: "Rehabilitación para pacientes con trastornos neurológicos." },
+      { titulo: "Pediátrica", descripcion: "Terapia especializada para niños y adolescentes." },
+      { titulo: "Deportiva", descripcion: "Recuperación y prevención de lesiones deportivas." },
+      { titulo: "Reumatológica", descripcion: "Tratamiento de enfermedades reumáticas y articulares." }
+    ]
+  },
+  {
+    titulo: "Electroterapia",
+    descripcion: "Uso de corrientes eléctricas terapéuticas para reducir el dolor y estimular la recuperación muscular.",
+    icono: "M13 10V3L4 14h7v7l9-11h-7z",
+    detalles: [
+      { titulo: "Descarga Muscular", descripcion: "Técnica especializada para aliviar la tensión muscular y promover la recuperación mediante corrientes terapéuticas." }
+    ]
+  },
+  {
+    titulo: "Plantillas",
+    descripcion: "Tratamientos con placas y materiales para mejorar la movilidad y reducir el estrés.",
+    icono: "M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z",
+    detalles: [
+      {
+        titulo: "Proceso de Elaboración",
+        descripcion: "Nuestro proceso incluye:",
+        paquetes: [
+          { nombre: "Básico", precio: "$1,500", tiempo: "1 semana" },
+          { nombre: "Premium", precio: "$2,000", tiempo: "5 días" },
+          { nombre: "Express", precio: "$2,500", tiempo: "3 días" }
+        ],
+        pasos: [
+          "1. Evaluación inicial y toma de medidas",
+          "2. Escaneo 3D del pie",
+          "3. Diseño personalizado",
+          "4. Fabricación",
+          "5. Prueba y ajustes finales"
+        ]
+      }
+    ]
+  }
+];
+---
+
+<section id="servicios" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Nuestros Servicios</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Ofrecemos una amplia gama de tratamientos personalizados para ayudarte a recuperar tu salud y bienestar.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {servicios.map((servicio, index) => (
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
+          <div class="rounded-full bg-blue-100 w-16 h-16 flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={servicio.icono} />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">{servicio.titulo}</h3>
+          <p class="text-gray-600 mb-4">{servicio.descripcion}</p>
+          <button
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+            onclick={`document.getElementById('modal-${index}').classList.remove('hidden')`}
+          >
+            Saber más
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Modales para cada servicio */}
+  {servicios.map((servicio, index) => (
+    <div
+      id={`modal-${index}`}
+      class="hidden fixed inset-0 bg-white/30 backdrop-blur-md z-1000 flex items-center justify-center p-4"
+
+      onclick={`if(event.target.id === 'modal-${index}') this.classList.add('hidden')`}
+    >
+      <div class="bg-blue-200 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+        <button
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          onclick={`document.getElementById('modal-${index}').classList.add('hidden')`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <h2 class="text-2xl font-bold text-blue-600 mb-6">{servicio.titulo}</h2>
+
+        {index === 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {servicio.detalles.map(detalle => (
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">{detalle.titulo}</h3>
+                <p class="text-gray-600">{detalle.descripcion}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {index === 1 && (
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">{servicio.detalles[0].titulo}</h3>
+            <p class="text-gray-600">{servicio.detalles[0].descripcion}</p>
+          </div>
+        )}
+
+        {index === 2 && (
+          <div class="space-y-6">
+            <div class="bg-gray-50 rounded-lg p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">Proceso de Elaboración</h3>
+              <ul class="list-none space-y-2 mb-6">
+                {servicio.detalles[0].pasos.map(paso => (
+                  <li class="text-gray-600">{paso}</li>
+                ))}
+              </ul>
+
+              <h4 class="text-lg font-semibold text-gray-800 mb-4">Paquetes Disponibles</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {servicio.detalles[0].paquetes.map(paquete => (
+                  <div class="bg-white rounded-lg p-4 shadow">
+                    <h5 class="font-semibold text-gray-800">{paquete.nombre}</h5>
+                    <p class="text-blue-600 font-bold text-xl">{paquete.precio}</p>
+                    <p class="text-gray-600">Tiempo: {paquete.tiempo}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</section>

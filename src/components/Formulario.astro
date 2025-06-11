@@ -1,0 +1,204 @@
+---
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzgVei4GFprC1y9y_RmgVqUxtSyIwTh86cZmyPIt0xIq-gyhggAxuSZKfOE5zRGy76sGg/exec';
+---
+
+<section class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Agenda tu Cita</h2>
+      
+      <form id="appointmentForm" data-url={scriptURL} class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre</label>
+            <input 
+              type="text" 
+              id="nombre" 
+              name="nombre" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          
+          <div>
+            <label for="apellido" class="block text-gray-700 font-medium mb-2">Apellido</label>
+            <input 
+              type="text" 
+              id="apellido" 
+              name="apellido" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="telefono" class="block text-gray-700 font-medium mb-2">Teléfono</label>
+          <input 
+            type="tel" 
+            id="telefono" 
+            name="telefono" 
+            required 
+            pattern="[0-9]{10}" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          <p class="text-sm text-gray-500 mt-1">Formato: 10 dígitos sin espacios</p>
+        </div>
+
+        <div>
+          <label for="email" class="block text-gray-700 font-medium mb-2">Correo Electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="fecha" class="block text-gray-700 font-medium mb-2">Fecha</label>
+            <input 
+              type="text" 
+              id="fecha" 
+              name="fecha" 
+              required 
+              class="flatpickr w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          
+          <div>
+            <label for="horario" class="block text-gray-700 font-medium mb-2">Horario</label>
+            <select 
+              id="horario" 
+              name="horario" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="" disabled selected>Selecciona un horario</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="mensaje" class="block text-gray-700 font-medium mb-2">Mensaje (opcional)</label>
+          <textarea 
+            id="mensaje" 
+            name="mensaje" 
+            rows="4" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 resize-none"
+          ></textarea>
+        </div>
+
+        <div class="text-center">
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            Agendar Cita
+          </button>
+        </div>
+
+        <div id="formStatus" class="hidden text-center py-3 rounded-md mt-4"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  import flatpickr from 'flatpickr';
+  import 'flatpickr/dist/flatpickr.css';
+  import { Spanish } from 'flatpickr/dist/l10n/es.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const horarioslv = [
+      "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
+      "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+      "19:00", "20:00", "21:00"
+    ];
+
+    const horarioss = [
+      "10:00", "11:00", "12:00", 
+      "13:00", "14:00", "15:00",
+      "16:00", "17:00", "18:00"
+    ];
+
+    const form = document.getElementById('appointmentForm');
+    const formStatus = document.getElementById('formStatus');
+    const horarioSelect = document.getElementById('horario');
+    
+    if (!form || !formStatus || !horarioSelect) return;
+
+    const appointmentForm = /** @type {HTMLFormElement} */ (form);
+    const scriptURL = appointmentForm.getAttribute('data-url');
+
+    if (!scriptURL) {
+      console.error('URL del script no encontrada');
+      return;
+    }
+
+    const datePicker = flatpickr('#fecha', {
+      locale: Spanish,
+      dateFormat: 'Y-m-d',
+      minDate: 'today',
+      disable: [date => date.getDay() === 0],
+      onChange: function(selectedDates) {
+        if (selectedDates.length > 0) {
+          updateHorarios(selectedDates[0]);
+        }
+      }
+    });
+
+    function updateHorarios(selectedDate) {
+      if (!selectedDate || !horarioSelect) return;
+
+      const day = selectedDate.getDay();
+      const horarios = day === 6 ? horarioss : horarioslv;
+
+      horarioSelect.innerHTML = '<option value="" disabled selected>Selecciona un horario</option>';
+
+      horarios.forEach(hora => {
+        const option = document.createElement('option');
+        option.value = hora;
+        option.textContent = `${hora} hrs`;
+        horarioSelect.appendChild(option);
+      });
+    }
+
+    appointmentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      formStatus.textContent = 'Enviando solicitud...';
+      formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-blue-100 text-blue-700';
+
+      try {
+        const formData = new FormData(appointmentForm);
+        const data = Object.fromEntries(formData.entries());
+
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+
+        if (response.ok) {
+          formStatus.textContent = '¡Cita agendada exitosamente! Te contactaremos para confirmar.';
+          formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-green-100 text-green-700';
+          appointmentForm.reset();
+          datePicker.clear();
+          horarioSelect.innerHTML = '<option value="" disabled selected>Selecciona un horario</option>';
+        } else {
+          throw new Error('Error en el servidor');
+        }
+      } catch (error) {
+        formStatus.textContent = 'Hubo un problema al agendar tu cita. Por favor, intenta nuevamente.';
+        formStatus.className = 'block text-center py-3 rounded-md mt-4 bg-red-100 text-red-700';
+        console.error('Error:', error);
+      }
+    });
+  });
+</script>
